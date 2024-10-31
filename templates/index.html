@@ -1,91 +1,187 @@
-{% extends 'base.html' %}
-
-{% block content %}
-    <div class="container">
-        <h2>Login Options</h2>
-        <div class="login-options">
-            <a href="{{ url_for('individual_login') }}" class="login-button" aria-label="Login as Individual">Login as Individual</a>
-            <a href="{{ url_for('guest_login') }}" class="login-button" aria-label="Login as Guest">Login as Guest</a>
-            <a href="{{ url_for('donator_login') }}" class="login-button" aria-label="Login as Donator">Login as Donator</a>
-            <a href="{{ url_for('admin_login') }}" class="login-button" aria-label="Login as Admin">Login as Admin</a>
-        </div>
-        <div class="home-link">
-            <a href="{{ url_for('index') }}" class="home-button">Home</a>
-        </div>
-    </div>
-{% endblock %}
-
-{% block styles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homelessness Prediction & Shelter Management</title>
     <style>
         body {
-            background-color: #f4f4f4;
             font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
         }
-
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            text-align: center;
+        h1 {
             color: #333;
-        }
-
-        .login-options {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px; /* Adds spacing between buttons */
-        }
-
-        .login-button {
-            text-decoration: none;
-            padding: 15px 25px;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            width: 100%; /* Makes the button fill the container */
-            text-align: center; /* Centers text in button */
-        }
-
-        .login-button:hover {
-            background-color: #0056b3; /* Darker shade on hover */
-            transform: translateY(-2px); /* Slight lift effect */
-        }
-
-        .home-link {
-            margin-top: 20px;
             text-align: center;
         }
-
-        .home-button {
-            text-decoration: none;
-            padding: 10px 20px;
-            background-color: #28a745; /* Green color for Home button */
-            color: white;
+        form {
+            background-color: #fff;
+            padding: 20px;
             border-radius: 5px;
-            transition: background-color 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 500px;
+            border: 1px solid #ccc;
         }
-
-        .home-button:hover {
-            background-color: #218838; /* Darker shade on hover */
+        label {
+            display: block;
+            margin: 10px 0 5px;
         }
-
-        /* Optional: Responsive design */
-        @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-            }
-
-            .login-button, .home-button {
-                padding: 12px 20px;
-            }
+        input[type="number"], input[type="text"] {
+            width: calc(100% - 16px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        p {
+            color: #ff0000; /* Red color for error messages */
+            text-align: center;
+        }
+        .form-section {
+            margin-bottom: 30px;
+            padding: 10px;
+        }
+        .form-section:last-child {
+            margin-bottom: 0;
         }
     </style>
-{% endblock %}
+</head>
+<body>
+
+    <!-- Homelessness Prediction Form -->
+    <h1>Homelessness Prediction</h1>
+    <form id="predictionForm" class="form-section">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required>
+
+        <label for="gender">Gender (0: Male, 1: Female, 2: Other):</label>
+        <input type="number" id="gender" name="gender" min="0" max="2" required>
+
+        <label for="income">Income Level:</label>
+        <input type="number" id="income" name="income_level" required>
+
+        <label for="employment">Employment Status (0: Employed, 1: Unemployed, 2: Part-time, 3: Retired):</label>
+        <input type="number" id="employment" name="employment_status" min="0" max="3" required>
+
+        <label for="education">Education Level (0: No formal education, 1: High School, 2: Associate, 3: Bachelor’s, 4: Master’s):</label>
+        <input type="number" id="education" name="education_level" min="0" max="4" required>
+
+        <label for="mental_health">Mental Health Status (0: Good, 1: Fair, 2: Poor):</label>
+        <input type="number" id="mental_health" name="mental_health_status" min="0" max="2" required>
+
+        <label for="substance_abuse">Substance Abuse (0: No, 1: Yes):</label>
+        <input type="number" id="substance_abuse" name="substance_abuse" min="0" max="1" required>
+
+        <label for="family_status">Family Status (Assumed numeric):</label>
+        <input type="number" id="family_status" name="family_status" required>
+
+        <label for="housing_history">Housing History (0: Rented, 1: Owned, 2: Homeless in the past, 3: Temporary shelter):</label>
+        <input type="number" id="housing_history" name="housing_history" min="0" max="3" required>
+
+        <label for="disability">Disability (0: No, 1: Yes):</label>
+        <input type="number" id="disability" name="disability" min="0" max="1" required>
+
+        <label for="region">Region (0: Urban, 1: Suburban, 2: Rural):</label>
+        <input type="number" id="region" name="region" min="0" max="2" required>
+
+        <label for="social_support">Social Support (0: Strong, 1: Moderate, 2: Weak):</label>
+        <input type="number" id="social_support" name="social_support" min="0" max="2" required>
+
+        <button type="button" onclick="submitForm()">Predict</button>
+    </form>
+    <p id="result"></p>
+
+    <!-- Shelter Capacity Management Form -->
+    <h1>Shelter Capacity Management</h1>
+    <form id="shelterForm" class="form-section">
+        <label for="shelter_id">Shelter ID:</label>
+        <input type="number" id="shelter_id" name="shelter_id" required>
+
+        <label for="shelter_name">Shelter Name:</label>
+        <input type="text" id="shelter_name" name="shelter_name" required>
+
+        <label for="total_capacity">Total Capacity:</label>
+        <input type="number" id="total_capacity" name="total_capacity" required>
+
+        <label for="current_occupancy">Current Occupancy:</label>
+        <input type="number" id="current_occupancy" name="current_occupancy" required>
+
+        <button type="button" onclick="submitShelterForm()">Update Shelter</button>
+    </form>
+    <p id="shelterResult"></p>
+
+    <!-- JavaScript to handle form submissions -->
+    <script>
+        // Homelessness Prediction Form Submission
+        function submitForm() {
+            const form = document.getElementById('predictionForm');
+            const formData = new FormData(form);
+            const jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = parseInt(value);
+            });
+
+            fetch('http://127.0.0.1:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = `Prediction: ${data.homeless ? 'Homeless' : 'Not Homeless'}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerText = 'An error occurred while processing the prediction.';
+            });
+        }
+
+        // Shelter Capacity Management Form Submission
+        function submitShelterForm() {
+            const form = document.getElementById('shelterForm');
+            const formData = new FormData(form);
+            const jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = isNaN(value) ? value : parseInt(value);
+            });
+
+            fetch('http://127.0.0.1:5000/manage_shelter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('shelterResult').innerText = `Shelter updated successfully.`;
+                } else {
+                    document.getElementById('shelterResult').innerText = `Failed to update shelter: ${data.message}`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('shelterResult').innerText = 'An error occurred while updating the shelter.';
+            });
+        }
+    </script>
+</body>
+</html>
